@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <!-- libraries & styles -->
+  <link
+    rel="stylesheet"
+    href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/3.8.3/superagent.min.js"></script>
+  <link rel="stylesheet" href="styles.css" />
+
+  <!-- thread interface -->
+  <body>
+    <div style="padding: 50px">
+      <button
+        type="button"
+        class="btn btn-primary"
+        style="font-size: 3em"
+        onclick="data()"
+      >
+        Show All Forums</button
+      ><br />
+      <div id="status"></div>
+    </div>
+  </body>
+
+  <script>
+    // query server and list threads
+    function data() {
+      const status = document.getElementById("status");
+      const url = "/forums";
+      let html = "";
+
+      superagent.get(url).end(function (err, res) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log(res);
+          html = '<div class="grid-container">';
+          let threadArr = Object.keys(res.body)
+          threadArr.forEach((thread) => {
+            html += `
+                        <div class="card" style="min-width: 18rem;">
+                        <div class="card-body">
+                            <h5 class="card-title">${res.body[thread].title}</h5>
+                            <p class="card-text">
+                                id: ${res.body[thread].id}<br>
+                                title: ${res.body[thread].title}<br>
+                                topic: ${res.body[thread].topic}<br>
+                                body: ${res.body[thread].body}<br>
+                                author: ${res.body[thread].author}<br>
+                            </p>
+                        </div>
+                        </div>
+                    `;
+          });
+          html += '</div">';
+          status.innerHTML = html;
+        }
+      });
+    }
+  </script>
+</html>

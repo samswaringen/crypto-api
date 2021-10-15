@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+  <!-- libraries & styles -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css"
+  />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/3.8.3/superagent.min.js"></script>
+
+
+  <!-- user interface -->
+  <!-- add formik for below form -->
+  <body>
+    <div style="padding: 50px">
+        <div>
+            <input id="sender" type = "text" placeholder="enter sender"></input>
+        </div>
+      <div>
+          <input id="receipient" type = "text" placeholder="enter receipient"></input>
+      </div>
+      <div>
+        <input id="message" type = "text" placeholder="mesage"></input>
+      </div>
+      <button
+        type="button"
+        class="btn btn-primary"
+        style="font-size: 3em"
+        onclick="add()"
+      >
+        Add Chat
+      </button>
+      <div id="status"></div>
+    </div>
+
+    <script>
+        function makeid(length) {
+          var result           = '';
+          var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+          var charactersLength = characters.length;
+          for ( var i = 0; i < length; i++ ) {
+            result += characters.charAt(Math.floor(Math.random() * 
+            charactersLength));
+        }
+        return result;
+      }
+      function add() {
+        // setup
+        //change to random leters and numbers
+        const id = makeid(25)
+        const date = new Date();
+
+        // random data
+        const sender = document.getElementById('sender').value
+        const receipient = document.getElementById('receipient').value
+        const message = document.getElementById('message').value
+        const messages = [message]
+
+        // write value to console
+        // -------------------------
+        console.log(date);
+        console.log(sender);
+        console.log(receipient);
+        console.log(messages);
+
+        // user object
+        const chat = {
+          id,
+          date,
+          sender,
+          receipient,
+          messages
+        };
+
+        // post user
+        const url = "/addChat";
+        // const url = 'http://localhost:3000/add';
+        superagent
+          .post(url)
+          .send(chat)
+          .end(function (err, res) {
+            if (err) {
+              console.log(err);
+            } else {
+              console.log(res);
+              if (res.statusCode === 200) {
+                document.getElementById("status").innerHTML = `
+                        <b>Response: Status Code 200.</b> The HTTP 200 OK success status response code indicates that the HTTP request has succeeded.<br>
+                        User: ${sender}<br>
+                        ${new Date()}
+                    `;
+              }
+            }
+          });
+      }
+    </script>
+  </body>
+</html>
