@@ -9,14 +9,8 @@ const db = low(adapter);
 const cors = require('cors');
 
 
-
-const allowedOrigins = ['http://localhost:3000'];
-
-const options = {
-    origin: allowedOrigins
-  };
 // allow cross-origin resource sharing (CORS)
-app.use(cors(options));
+app.use(cors());
 
 // data parser - used to parse post data
 var bodyParser = require('body-parser');
